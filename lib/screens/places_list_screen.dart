@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:great_places/providers/great_places.dart';
 import 'package:great_places/utils/app_routes.dart';
+import 'package:great_places/widgets/place_list_item.dart';
+import 'package:provider/provider.dart';
 
 class PlacesListScreen extends StatelessWidget{
 
@@ -29,10 +32,15 @@ class PlacesListScreen extends StatelessWidget{
         decoration: BoxDecoration(
           color: Colors.black
         ),
-        child: Center(
-          child: CircularProgressIndicator(
-            color: Colors.white,
+        child: Consumer<GreatPlaces>(
+          child: Center(
+            child: Text("No local saved", style: TextStyle(color: Colors.white),),
           ),
+          builder: (ctx, greatPlaces, ch) => greatPlaces.items.isEmpty ? 
+            ch! : ListView.builder(
+              itemCount: greatPlaces.items.length,
+              itemBuilder: (ctx, index) => PlaceListItem(place: greatPlaces.items[index])
+            )
         ),
       ),
 
@@ -57,5 +65,3 @@ class PlacesListScreen extends StatelessWidget{
     );
   }
 }
-
-//const Color.fromARGB(255, 38, 125, 92)

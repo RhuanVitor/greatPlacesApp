@@ -3,14 +3,16 @@ import 'dart:io';
 class Place {
   late final String id;
   late final String title;
-  late final PlaceLocation location;
-  late File image;
+  late final PlaceLocation? location;
+  late File? image;
+  late DateTime pickDateTime;
 
   Place({
     required this.id,
     required this.title,
     required this.location,
-    required this.image
+    required this.image,
+    required this.pickDateTime
   });
 }
 

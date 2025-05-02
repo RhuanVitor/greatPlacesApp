@@ -19,6 +19,8 @@ class GreatPlaces with ChangeNotifier{
         pickDateTime: DateTime.now()
       )
     ).toList();
+    debugPrint(_items.toString());
+    notifyListeners();
   }
 
   List<Place> get items => [..._items];

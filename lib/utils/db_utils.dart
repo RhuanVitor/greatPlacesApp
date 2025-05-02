@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:path/path.dart' as path;
 
@@ -7,10 +8,11 @@ class DbUtils {
 
     return sql.openDatabase(
       path.join(dbPath, 'places.db'),
+      version: 1,
       onCreate: (db, version){
         return db.execute(
-          'CREATE TABLE places (id TEXT PRIMARY KEY, title TEXT, image TEXT, )'
-        );
+          'CREATE TABLE places (id TEXT PRIMARY KEY, title TEXT, image TEXT)'
+        ).then((error) { debugPrint("resultado");});
       },
     );
   }

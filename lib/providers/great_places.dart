@@ -2,8 +2,10 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:great_places/models/place.dart';
 import 'package:great_places/utils/db_utils.dart';
+import 'package:great_places/utils/location_util.dart';
 
 class GreatPlaces with ChangeNotifier{
   List<Place> _items = [];
@@ -14,7 +16,11 @@ class GreatPlaces with ChangeNotifier{
       (item) => Place(
         id: item['id'].toString(), 
         title: item['title'].toString(), 
-        location: null, 
+        location: PlaceLocation(
+          latitude: item['latitude'] as double, 
+          longitude: item['longitude'] as double,
+          address: item['address'] as String
+        ), 
         image: File(item['image'].toString()), 
         pickDateTime: DateTime.now()
       )
@@ -29,13 +35,19 @@ class GreatPlaces with ChangeNotifier{
 
   Place itemByIndex(index) => _items[index];
 
-  void addPlace(String title, File image){
+  Future<void> addPlace(String title, File image, LatLng position) async {
+    String adress = await LocationUtil.getAdressFrom(position);
+
     final newPlace = Place(
       id: Random().nextInt(99999).toString(), 
       title: title, 
-      location: null, 
+      location: PlaceLocation(
+        latitude: position.latitude, 
+        longitude: position.longitude,
+        address: adress
+      ), 
       image: image,
-      pickDateTime: DateTime.now()
+      pickDateTime: DateTime.now(),
     );
 
     _items.add(newPlace);
@@ -43,9 +55,18 @@ class GreatPlaces with ChangeNotifier{
       'places', {
         'id': newPlace.id,
         'title': newPlace.title,
-        'image': newPlace.image!.path
+        'image': newPlace.image!.path,
+        'latitude': position.latitude,
+        'longitude': position.longitude,
+        'address': adress
       }
     );
+    notifyListeners();
+  }
+
+  Future<void> deletePlace(placeId) async{
+    DbUtils.delete('places', placeId);
+    _items.removeWhere((item) => item.id == placeId);
     notifyListeners();
   }
 }

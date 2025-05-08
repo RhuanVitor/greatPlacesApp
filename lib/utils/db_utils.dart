@@ -11,7 +11,7 @@ class DbUtils {
       version: 1,
       onCreate: (db, version){
         return db.execute(
-          'CREATE TABLE places (id TEXT PRIMARY KEY, title TEXT, image TEXT)'
+          'CREATE TABLE places (id TEXT PRIMARY KEY, title TEXT, image TEXT, latitude REAL, longitude REAL, address TEXT)'
         ).then((error) { debugPrint("resultado");});
       },
     );
@@ -25,5 +25,14 @@ class DbUtils {
   static Future<List<Map<String, Object?>>> getData(String table) async{
     final db = await DbUtils.Database();
     return db.query(table);
+  }
+
+  static Future<void> delete(String table, String id) async{
+    final db = await DbUtils.Database();
+    await db.delete(
+      table,
+      where: 'id = ?',
+      whereArgs: [id]
+    );
   }
 }

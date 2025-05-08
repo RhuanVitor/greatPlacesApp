@@ -12,18 +12,18 @@ class Place {
     required this.title,
     required this.location,
     required this.image,
-    required this.pickDateTime
+    required this.pickDateTime,
   });
 }
 
 class PlaceLocation{
   late final double latitude;
   late final double longitude;
-  late final String adress;
+  late final String address;
 
   PlaceLocation({
     required this.latitude,
     required this.longitude,
-    required this.adress
+    this.address = ''
   });
 }

@@ -7,19 +7,16 @@ import 'package:path_provider/path_provider.dart' as syspath;
 
 
 class ImageInput extends StatefulWidget{
-  final Function(File) onSelectImage; // <- Adicione isso
+  final Function(File) onSelectImage;
 
-  ImageInput(this.onSelectImage); // <- Construtor recebe a função
+  ImageInput(this.onSelectImage);
 
   @override
   State<ImageInput> createState() => _ImageInputState();
 }
 
 class _ImageInputState extends State<ImageInput> {
-  late final Function onSelectImage;
   var _storedImage = null;
-
-  
 
   _takePicture() async{
     final ImagePicker _picker = ImagePicker();
@@ -43,36 +40,42 @@ class _ImageInputState extends State<ImageInput> {
 
   @override
   Widget build(BuildContext context){
-    return Row(
-      children: [
-        Container(
-          width: 180,
-          height: 100,
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.grey )
-          ),
-          alignment: Alignment.center,
-          child: _storedImage != null ? Image.file(
-            _storedImage,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ) : Text(
-            "No image!",
-            style: TextStyle(
-              color: Colors.white
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        children: [
+          Container(
+            width: 180,
+            height: 100,
+            decoration: BoxDecoration(
+              border: Border.all(width: 2, color: Colors.grey)
             ),
+            alignment: Alignment.center,
+            child: _storedImage != null ? Image.file(
+              _storedImage,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ) : Text(
+              "Tire uma foto!",
+              style: TextStyle(
+                color: Colors.white
+              ),
+            )
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.camera,
+              color: Colors.white,
+            ), 
+            onPressed: (){
+              _takePicture();
+            },
           )
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        IconButton(
-          icon: Icon(Icons.camera), 
-          onPressed: (){
-            _takePicture();
-          },
-        )
-      ],
+        ],
+      ),
     );
   }
 }
